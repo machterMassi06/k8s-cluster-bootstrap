@@ -15,5 +15,9 @@ The objective is to provide a reproducible procedure for deploying a production-
 - Kubernetes networking configuration
 - Basic cluster validation
 
-The cluster can be deployed **Automatically**, by executing the provided scripts in the recommended order.
+The cluster can be deployed **Automatically**, by executing the following commande 
+
+```bash 
+./setup-cluster.sh --masters VM-ID1,VM-ID2,... --workers VMI-D1,VM-ID2,... --network-internal NETWORK
 ---
+```
