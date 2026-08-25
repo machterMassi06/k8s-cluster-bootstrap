@@ -69,10 +69,7 @@ swapoff -a
 
 sed -i '/ swap / s/^/#/' /etc/fstab
 
-# Kernel modules
-
-echo "==> Loading required kernel modules..."
-
+# loading Kernel modules
 cat > /etc/modules-load.d/k8s.conf <<EOF
 overlay
 br_netfilter
@@ -83,8 +80,6 @@ modprobe br_netfilter
 
 # Kubernetes networking
 
-echo "==> Configuring Kubernetes networking..."
-
 cat > /etc/sysctl.d/99-kubernetes.conf <<EOF
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -94,8 +89,6 @@ EOF
 sysctl --system
 
 # Required packages
-
-echo "==> Installing required packages..."
 
 dnf install -y \
     curl \
@@ -109,4 +102,3 @@ dnf install -y \
     ebtables
 
 echo
-echo "==> Node preparation completed."
