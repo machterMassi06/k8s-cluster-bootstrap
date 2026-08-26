@@ -25,13 +25,14 @@ If your VMs are hosted on OpenStack, the Kubernetes nodes must first be connecte
 
 See [`openstack/README.md`](openstack/README.md) for the network setup.
 
-Once the private network is configured, the complete cluster can be deployed automatically with:
+Once the private network is configured, the complete cluster (by default k8s v1.30) can be deployed automatically with:
 
 ```bash
 ./setup-cluster.sh \
   --masters VM-ID1,VM-ID2,... \
   --workers VM-ID1,VM-ID2,... \
-  --network-internal NETWORK
+  --network-internal NETWORK \
+  [--k8s-version <K8S_VERSION>] 
 ```
 
 The `VM-ID` values are the IDs of the VMs already created in OpenStack.
@@ -46,7 +47,7 @@ In this case, the private network between all Kubernetes nodes must already be c
 
 The nodes must be able to communicate with each other using their private IPs.
 
-Apply the scripts in the following order.
+Apply the scripts in the following order (you you must to prefix each command by `sudo <command>`).
 
 #### Step 1 — Prepare all nodes
 
@@ -85,7 +86,13 @@ scripts/00-all-nodes/02-install-containerd.sh
 Run on **every node**:
 
 ```bash
-scripts/00-all-nodes/03-install-kubernetes.sh
+scripts/00-all-nodes/03-install-kubernetes.sh --version <K8S_VERSION>
+```
+
+example : 
+
+```bash
+scripts/00-all-nodes/03-install-kubernetes.sh --version v1.30
 ```
 
 #### Step 4 — Initialize the first control-plane
