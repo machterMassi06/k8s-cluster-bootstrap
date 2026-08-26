@@ -43,7 +43,7 @@ The `VM-ID` values are the IDs of the VMs already created in OpenStack.
 
 If you already have AlmaLinux 9.x VMs but do not use OpenStack, you can execute the scripts manually.
 
-In this case, the private network between all Kubernetes nodes must already be configured.
+In this case, the private network between all Kubernetes nodes must already be configured before.
 
 The nodes must be able to communicate with each other using their private IPs.
 
@@ -107,18 +107,18 @@ This initializes the Kubernetes cluster and generates the commands required to j
 
 #### Step 5 — Join additional control-planes
 
-Run on each additional control-plane node:
+Run on each additional control-plane node (CPLANES_JOIN_COMMAND is printed in the step 4):
 
 ```bash
-scripts/01-control-plane/02-join-control-plane.sh
+scripts/01-control-plane/02-join-control-plane.sh --join-command <CPLANES_JOIN_COMMAND>
 ```
 
 #### Step 6 — Join workers
 
-Run on every worker node:
+Run on every worker node (WORKERS_JOIN_COMMAND is printed in the step 4):
 
 ```bash
-scripts/02-workers/01-join-worker.sh
+scripts/02-workers/01-join-worker.sh --join-command <WORKERS_JOIN_COMMAND>
 ```
 
 #### Step 7 — Install Calico
