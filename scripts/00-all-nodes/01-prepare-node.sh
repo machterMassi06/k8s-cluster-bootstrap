@@ -36,20 +36,11 @@ if [[ -z "$HOSTNAME" || -z "$NODES" ]]; then
 fi
 
 # System update
-echo "==> Updating system..."
-
 dnf update -y
-
-# Hostname
-
-echo "==> Setting hostname: $HOSTNAME"
 
 hostnamectl set-hostname "$HOSTNAME"
 
 # /etc/hosts
-
-echo "==> Configuring /etc/hosts..."
-
 sed -i \
     '/# K8S-CLUSTER-NODES-START/,/# K8S-CLUSTER-NODES-END/d' \
     /etc/hosts
