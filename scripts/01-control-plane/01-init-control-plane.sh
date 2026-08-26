@@ -25,25 +25,29 @@ cp /etc/kubernetes/admin.conf \
 chown -R almalinux:almalinux \
     /home/almalinux/.kube
 
-# Generate certificate key
-
+# Generate certificate key for additional control-planes
 CERTIFICATE_KEY=$(kubeadm init phase upload-certs --upload-certs | tail -n 1)
 
-# Generate join command
+# Generate worker join command
+WORKER_JOIN_COMMAND=$(kubeadm token create --print-join-command)
 
-echo "Generating control-plane join command..."
+echo "$WORKER_JOIN_COMMAND" > /tmp/k8s-worker-join.sh
 
-JOIN_COMMAND=$(kubeadm token create --print-join-command)
+# Generate control-plane join command
+CONTROL_PLANE_JOIN_COMMAND="$WORKER_JOIN_COMMAND --control-plane --certificate-key $CERTIFICATE_KEY"
 
-JOIN_COMMAND="$JOIN_COMMAND --control-plane --certificate-key $CERTIFICATE_KEY"
+echo "$CONTROL_PLANE_JOIN_COMMAND" > /tmp/k8s-control-plane-join.sh
 
-echo "$JOIN_COMMAND" > /tmp/k8s-control-plane-join.sh
+chmod 644 \
+    /tmp/k8s-worker-join.sh \
+    /tmp/k8s-control-plane-join.sh
 
-chmod 644 /tmp/k8s-control-plane-join.sh
-
+echo
 echo "Control-plane join command:"
-echo "$JOIN_COMMAND"
-
+echo "$CONTROL_PLANE_JOIN_COMMAND"
+echo
+echo "Worker join command:"
+echo "$WORKER_JOIN_COMMAND"
 # Verify
 sudo -u almalinux kubectl \
     --kubeconfig=/home/almalinux/.kube/config \
