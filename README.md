@@ -97,13 +97,14 @@ scripts/00-all-nodes/03-install-kubernetes.sh --version v1.30
 
 #### Step 4 — Initialize the first control-plane
 
-Run on the **first control-plane node**:
+Run on the **first control-plane node**. Before running the script, make sure that **TCP port 6443 is open on the first control-plane node public IP**, as additional control-plane and worker nodes will use this endpoint to join the cluster.
 
 ```bash
 scripts/01-control-plane/01-init-control-plane.sh
 ```
 
 This initializes the Kubernetes cluster and generates the commands required to join additional nodes.
+
 
 #### Step 5 — Join additional control-planes
 
